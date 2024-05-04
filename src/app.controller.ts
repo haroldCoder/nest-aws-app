@@ -43,6 +43,7 @@ export class AppController {
       res.status(HttpStatus.OK).json(result)
     }
     catch(err){
+      console.log(err)
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({msg: "Internal error with s3 bucket"})
     }
   }
@@ -51,7 +52,7 @@ export class AppController {
   @Bind(Res())
   async getFiles(res): Promise<void>{
     try{
-      const result = await this.s3service.getFiles(process.env.AWS_BUCKET_NAME, "gear.png");
+      const result = await this.s3service.getFiles(process.env.AWS_BUCKET_NAME);
       res.status(HttpStatus.OK).send(result);
     }
     catch(err){

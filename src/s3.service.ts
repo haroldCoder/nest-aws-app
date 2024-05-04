@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Injectable } from "@nestjs/common";
 import { AWS_BUCKET_NAME } from "config";
@@ -25,7 +25,8 @@ export class S3Service{
         const uploadParams = {
          Bucket: bucket_name,
          Key: file.originalname,
-         Body: stream
+         Body: stream,
+         ContentType: file.mimetype
         }
  
         const command = new PutObjectCommand(uploadParams);
@@ -33,13 +34,18 @@ export class S3Service{
         return result;
      }
 
-     async getFiles(bucket_name: string, key: string): Promise<string>{
-        const command = new GetObjectCommand({
-            Bucket: bucket_name,
-            Key: key
+     async getFiles(bucket_name: string): Promise<Array<string>>{
+        const command = new ListObjectsV2Command({
+            Bucket: bucket_name
+        })
+        const urls : Array<string> = []
+
+        const response = await this.s3client.send(command);
+
+        response.Contents.map((obj)=>{
+            urls.push(`${process.env.AWS_URL_BUCKET}/${obj.Key}`);
         })
 
-        const response = await getSignedUrl(this.s3client, command);
-        return response
+        return urls;
      }
 }
