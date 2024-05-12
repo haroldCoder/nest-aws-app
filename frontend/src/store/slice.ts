@@ -26,8 +26,11 @@ export const filesaws = createSlice({
         },
         deleteFiles: (state, action: {payload: {ix: number}})=>{
             state.files.filesuser = state.files.filesuser.filter((files, index)=>index != action.payload.ix);
+        },
+        deleteAllFiles: (state)=>{
+            state.files.filesuser.splice(0, state.files.filesuser.length);
         }
     }
 })
 
-export const {uploadFiles, deleteFiles} = filesaws.actions;
+export const {uploadFiles, deleteFiles, deleteAllFiles} = filesaws.actions;
