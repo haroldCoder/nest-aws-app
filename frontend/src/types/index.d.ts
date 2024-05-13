@@ -30,3 +30,10 @@ export type file_original = {
     path: string,
     size: number
 }
+
+export type files_out = {
+    Key: string,
+    LastModified,
+    size: number,
+    uri?: string
+}
