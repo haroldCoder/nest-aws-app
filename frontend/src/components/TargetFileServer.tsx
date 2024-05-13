@@ -6,7 +6,7 @@ import any_file from "../assets/files/web_file.png"
 
 export default function TargetFileServer({file, name, lastdate}: {file: string, name: string, lastdate: string | Date}) {
   return (
-    <div className="w-[40%] p-4 bg-gradient-to-tr flex flex-col justify-between from-slate-50 to-zinc-700 rounded-md">
+    <div className="w-[70%] overflow-auto h-[60vh] p-4 bg-gradient-to-tr flex flex-col justify-between from-slate-50 to-zinc-700 rounded-md">
         <section className="mb-6 flex justify-center p-4 border-b-2 border-zinc-300">
             <img className=" pointer-events-none" src={
                 name.match(/\.png/) || name.match(/\.jpg/)

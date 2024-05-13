@@ -29,7 +29,7 @@ export default function ViewFiles({ store }: { store: StoreRedux }) {
   })
 
   return (
-    <div className='grid gap-y-6 max-h-[30vh] grid-cols-2'>
+    <div className='grid gap-y-6 max-h-[30vh] grid-cols-3 w-[80%] justify-center items-center'>
       {
         files.map((fl: files_out) => (
           <>
