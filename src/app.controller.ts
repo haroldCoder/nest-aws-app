@@ -5,6 +5,7 @@ import { diskStorage } from "multer"
 import { extname } from 'path';
 import { S3Service } from './s3.service';
 import { AWS_BUCKET_NAME } from 'config';
+import { Response } from 'express';
 
 @Controller()
 export class AppController {
@@ -59,6 +60,21 @@ export class AppController {
       console.log(err);
       
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({msg: "Internal error with s3 bucket"})
+    }
+  }
+
+  @Get("/files/extra-info")
+  @Bind(Res())
+  async getFilesExtra(res: Response): Promise<void>{
+    try{
+      const result = await this.s3service.getAllFilesInf(process.env.AWS_BUCKET_NAME);
+      res.status(HttpStatus.OK).send(result);
+    }
+    catch(err){
+      console.log(err);
+
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({msg: "Internal error with s3 bucket"})
+      
     }
   }
 }

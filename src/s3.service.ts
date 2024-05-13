@@ -3,6 +3,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { Injectable } from "@nestjs/common";
 import { AWS_BUCKET_NAME } from "config";
 import * as fs from "fs"
+import { files_out } from "./types";
 
 @Injectable()
 export class S3Service{
@@ -47,5 +48,26 @@ export class S3Service{
         })
 
         return urls;
+     }
+
+     async getAllFilesInf(bucket_name: string) : Promise<Array<files_out>>{
+        const command = new ListObjectsV2Command({
+            Bucket: bucket_name
+        });
+
+        const response : Array<any> = (await this.s3client.send(command)).Contents;
+
+        const newArray : Array<files_out> = [];
+
+        response.map((rp)=>{
+            newArray[newArray.length] = {
+                Key: rp.Key,
+                LastModified: rp.LastModified,
+                size: rp.size,
+                uri: `${process.env.AWS_URL_BUCKET}/${rp.Key}`
+            };
+        })
+        
+        return newArray;
      }
 }

@@ -13,24 +13,25 @@ export default function UploadFiles({ store }: { store: StoreRedux }) {
     const selector: Array<File> = useSelector((state: any) => state.files.files.filesuser);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        console.log(selector);
-    }, [selector]);
-
     const SendFilesServer = async() =>{
-        const formdata = new FormData();
-        selector.map((file)=>{
-            formdata.append("file", new File([file], file.name, {type: file.type}));
-        })
-        const response = await uploadFilesinServer(formdata);
-        console.log(response);
-        if(response?.status == 200){
-            toast.success("Files upload to server")
+        if(selector.length > 0){
+            const formdata = new FormData();
+            selector.map((file) => {
+                formdata.append("file", new File([file], file.name, { type: file.type }));
+            })
+            const response = await uploadFilesinServer(formdata);
+            console.log(await response?.json());
+            if (response?.status == 200) {
+                toast.success("Files upload to server")
+            }
+            else {
+                toast.error("An ocurred error")
+            }
+            dispatch(deleteAllFiles()); 
         }
         else{
-            toast.error("An ocurred error")
+            toast.error("At least one file required")
         }
-        dispatch(deleteAllFiles());
     }
 
     return (
